@@ -1,5 +1,7 @@
-$examplepath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\Power"
-$examplename = "Firmware-Final"
+$ldapsigningpath = "HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters"
+$ldapsigningname = "LDAPServerIntegrity"
 
-$test = Get-ItemProperty -Path $examplepath -Name $examplename | Select-Object -ExpandProperty $examplename
-$test
+$ldapsigningoutcome = Get-ItemProperty -Path $ldapsigningpath -Name $ldapsigningname | Select-Object -ExpandProperty $ldapsigningname
+Write-Output "LDAP Signing is set to $ldapsigningoutcome"
+#1 means none
+#2 means require signing
