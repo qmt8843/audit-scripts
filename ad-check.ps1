@@ -103,12 +103,27 @@ try {
     if (Test-Path $30dayspath) {
         $30daysoutcome = Get-ItemProperty -Path $30dayspath -Name $30daysname | Select-Object -ExpandProperty $30daysname
         Write-Output "Maximum machine account password set to 30 or fewer output: $30daysoutcome`r`n"
-        #Should be 1 (enabled)
-        #Path doesn't exist or error means it is disabled
+        #Should be 30 or less (but not 0)
+        #Default is 30
     } else {
         Write-Output "Maximum machine account password set to 30 or fewer does not exist!`r`n"
     }
 }
 catch {
     Write-Output "Error auditing Maximum machine account password set to 30 or fewer`r`n"
+}
+
+try {
+    $unlockpath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
+    $unlockname = "ForceUnlockLogon"
+    if (Test-Path $unlockpath) {
+        $unlockoutcome = Get-ItemProperty -Path $unlockpath -Name $unlockname | Select-Object -ExpandProperty $unlockname
+        Write-Output "Require Domain Controller Authentication to unlock workstation output: $unlockoutcome`r`n"
+        #Should be 1 (Enabled)
+    } else {
+        Write-Output "Require Domain Controller Authentication to unlock workstation does not exist!`r`n"
+    }
+}
+catch {
+    Write-Output "Error auditing Require Domain Controller Authentication to unlock workstation`r`n"
 }
