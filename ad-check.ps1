@@ -143,3 +143,19 @@ try {
 catch {
     Write-Output "Error auditing Prohibit connection to non-domain networks when connected to domain authenticated network`r`n"
 }
+
+try {
+    $enumeratepath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"
+    $enumeratename = "DontEnumerateConnectedUsers"
+    if (Test-Path $enumeratepath) {
+        $enumerateoutcome = Get-ItemProperty -Path $enumeratepath -Name $enumeratename -ErrorAction Stop | Select-Object -ExpandProperty $enumeratename
+        Write-Output "Do not enumerate connected users on domain-joined computers output: $enumerateoutcome`r`n"
+        #Should be 1 (Enabled)
+        #Error means it isnt applied
+    } else {
+        Write-Output "Do not enumerate connected users on domain-joined computers does not exist!`r`n"
+    }
+}
+catch {
+    Write-Output "Error auditing Do not enumerate connected users on domain-joined computers`r`n"
+}
