@@ -86,8 +86,7 @@ try {
     $encryptwhenname = "SealSecureChannel"
     if (Test-Path $encryptwhenpath) {
         $encryptwhenoutcome = Get-ItemProperty -Path $encryptwhenpath -Name $encryptwhenname | Select-Object -ExpandProperty $encryptwhenname
-        $encryptwhenoutcomepart = $encryptwhenoutcome.SealSecureChannel
-        Write-Output "Digitally encrypt or sign secure channel data (when possible) output: $encryptwhenoutcomepart`r`n"
+        Write-Output "Digitally encrypt or sign secure channel data (when possible) output: $encryptwhenoutcome`r`n"
         #Should be 1 (enabled)
         #Path doesn't exist or error means it is disabled
     } else {
@@ -96,4 +95,20 @@ try {
 }
 catch {
     Write-Output "Error auditing Digitally encrypt or sign secure channel data (when possible)`r`n"
+}
+
+try {
+    $30dayspath = "HKLM:\System\CurrentControlSet\Services\Netlogon\Parameters"
+    $30daysname = "MaximumPasswordAge"
+    if (Test-Path $30dayspath) {
+        $30daysoutcome = Get-ItemProperty -Path $30dayspath -Name $30daysname | Select-Object -ExpandProperty $30daysname
+        Write-Output "Maximum machine account password set to 30 or fewer output: $30daysoutcome`r`n"
+        #Should be 1 (enabled)
+        #Path doesn't exist or error means it is disabled
+    } else {
+        Write-Output "Maximum machine account password set to 30 or fewer does not exist!`r`n"
+    }
+}
+catch {
+    Write-Output "Error auditing Maximum machine account password set to 30 or fewer`r`n"
 }
