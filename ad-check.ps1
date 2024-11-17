@@ -159,3 +159,19 @@ try {
 catch {
     Write-Output "Error auditing Do not enumerate connected users on domain-joined computers`r`n"
 }
+
+try {
+    $enumeratepath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\LAPS"
+    $enumeratename = "BackupDirectory"
+    if (Test-Path $enumeratepath) {
+        $enumerateoutcome = Get-ItemProperty -Path $enumeratepath -Name $enumeratename -ErrorAction Stop | Select-Object -ExpandProperty $enumeratename
+        Write-Output "Configure password backup directory' is set to 'Enabled: Active Directory' or 'Enabled: Azure Active Directory output: $enumerateoutcome`r`n"
+        #Should be 1 (Active Directory) or 2 (Azure AD)
+        #Error means it isnt applied
+    } else {
+        Write-Output "Configure password backup directory' is set to 'Enabled: Active Directory' or 'Enabled: Azure Active Directory does not exist!`r`n"
+    }
+}
+catch {
+    Write-Output "Error auditing Configure password backup directory' is set to 'Enabled: Active Directory' or 'Enabled: Azure Active Directory`r`n"
+}
