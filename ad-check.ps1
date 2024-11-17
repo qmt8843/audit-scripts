@@ -127,3 +127,18 @@ try {
 catch {
     Write-Output "Error auditing Require Domain Controller Authentication to unlock workstation`r`n"
 }
+
+try {
+    $prohibitpath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\GroupPolicy"
+    $prohibitname = "fBlockNonDomain"
+    if (Test-Path $prohibitpath) {
+        $prohibitoutcome = Get-ItemProperty -Path $prohibitpath -Name $prohibitname | Select-Object -ExpandProperty $prohibitname
+        Write-Output "Prohibit connection to non-domain networks when connected to domain authenticated network output: $prohibitoutcome`r`n"
+        #Should be 1 (Enabled)
+    } else {
+        Write-Output "Prohibit connection to non-domain networks when connected to domain authenticated network does not exist!`r`n"
+    }
+}
+catch {
+    Write-Output "Error auditing Prohibit connection to non-domain networks when connected to domain authenticated network`r`n"
+}
