@@ -1,8 +1,8 @@
 try {
     $ldapsigningpath = "HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters"
     $ldapsigningname = "LDAPServerIntegrity"
-    $ldapsigningoutcome = Get-ItemProperty -Path $ldapsigningpath -Name $ldapsigningname | Select-Object -ExpandProperty $ldapsigningname
     if (Test-Path $ldapsigningpath) {
+        $ldapsigningoutcome = Get-ItemProperty -Path $ldapsigningpath -Name $ldapsigningname | Select-Object -ExpandProperty $ldapsigningname
         if ($ldapsigningoutcome ) {
             Write-Output "LDAP Signing output: $ldapsigningoutcome`r`n"
         }
@@ -42,8 +42,8 @@ try {
 try {
     $kerbencryptionpath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters"
     $kerbencryptionname = "SupportedEncryptionTypes"
-    $kerbencryptionoutput = Get-ItemProperty -Path $kerbencryptionpath -Name $kerbencryptionname | Select-Object -ExpandProperty $kerbencryptionname
     if (Test-Path $kerbencryptionpath){
+        $kerbencryptionoutput = Get-ItemProperty -Path $kerbencryptionpath -Name $kerbencryptionname | Select-Object -ExpandProperty $kerbencryptionname
         if ($kerbencryptionoutput) {
             Write-Output "Kerberos Encryption Support: $kerbencryptionoutput`r`n"
         }
