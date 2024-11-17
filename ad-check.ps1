@@ -9,11 +9,11 @@ try {
         #1 means none
         #2 means require signing
     } else {
-        Write-Output "LDAP Signing Path does not exist!"
+        Write-Output "LDAP Signing Path does not exist!`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing LDAP Signing"
+    Write-Output "Error auditing LDAP Signing`r`n"
 }
 
 
@@ -25,7 +25,7 @@ try {
     #Default is success
     #Should be set to success & failure
 } catch {
-    Write-Output "Error auditing Audit Kerberos Authentication Service"
+    Write-Output "Error auditing Audit Kerberos Authentication Service`r`n"
 }
 
 try {
@@ -36,7 +36,7 @@ try {
     #Default is success
     #Should be set to success & failure
 } catch {
-    Write-Output "Error auditing Audit Kerberos Service Ticket Operations"
+    Write-Output "Error auditing Audit Kerberos Service Ticket Operations`r`n"
 }
 
 try {
@@ -49,11 +49,11 @@ try {
         }
         #Should be 2147483640
     } else {
-        Write-Output "Kerberos Encryption Support does not exist!"
+        Write-Output "Kerberos Encryption Support does not exist!`r`n"
     }
     
 } catch {
-    Write-Output "Error auditing Kerberos Encryption Support"
+    Write-Output "Error auditing Kerberos Encryption Support`r`n"
 }
 
 try {
@@ -67,11 +67,11 @@ try {
         #Should be 0 (disabled)
         #Path doesn't exist or error means it is disabled
     } else {
-        Write-Output "Allow server operators to schedule tasks does not exist!"
+        Write-Output "Allow server operators to schedule tasks does not exist!`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing Allow server operators toschedule tasks"
+    Write-Output "Error auditing Allow server operators toschedule tasks`r`n"
 }
 
 try {
@@ -85,9 +85,9 @@ try {
         #Should be 1 (enabled)
         #Path doesn't exist or error means it is disabled
     } else {
-        Write-Output "Digitally encrypt or sign secure channel data (always) does not exist!"
+        Write-Output "Digitally encrypt or sign secure channel data (always) does not exist!`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing Digitally encrypt or sign secure channel data (always)"
+    Write-Output "Error auditing Digitally encrypt or sign secure channel data (always)`r`n"
 }
