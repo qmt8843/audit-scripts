@@ -80,7 +80,7 @@ try {
     if (Test-Path $encryptsecurechannelpath) {
         $encryptsecurechanneloutcome = Get-ItemProperty -Path $encryptsecurechannelpath -Name $encryptsecurechannelname | Select-Object -ExpandProperty $encryptsecurechannelame
         if ($encryptsecurechanneloutcome ) {
-            Write-Output "Digitally encrypt or sign secure channel data (always) output: $encryptsecurechanneloutcome`r`n"
+            Write-Output "Digitally encrypt or sign secure channel data (always) output: $encryptsecurechanneloutcome.RequireSignOrSeal`r`n"
         }
         #Should be 1 (enabled)
         #Path doesn't exist or error means it is disabled
