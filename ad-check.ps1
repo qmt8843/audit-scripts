@@ -55,3 +55,39 @@ try {
 } catch {
     Write-Output "Error auditing Kerberos Encryption Support"
 }
+
+try {
+    $opscheduletaskpath = "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa"
+    $opscheduletaskname = "SubmitControl"
+    if (Test-Path $opscheduletaskpath) {
+        $opscheduletaskoutcome = Get-ItemProperty -Path $opscheduletaskpath -Name $opscheduletaskname | Select-Object -ExpandProperty $opscheduletaskname
+        if ($opscheduletaskoutcome ) {
+            Write-Output "Allow server operators to schedule tasks output: $opscheduletaskoutcome`r`n"
+        }
+        #Should be 0 (disabled)
+        #Path doesn't exist or error means it is disabled
+    } else {
+        Write-Output "Allow server operators to schedule tasks does not exist!"
+    }
+}
+catch {
+    Write-Output "Error auditing Allow server operators toschedule tasks"
+}
+
+try {
+    $encryptsecurechannelpath = "HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"
+    $encryptsecurechannelname = "RequireSignOrSeal"
+    if (Test-Path $encryptsecurechannelpath) {
+        $encryptsecurechanneloutcome = Get-ItemProperty -Path $encryptsecurechannelpath -Name $encryptsecurechannelname | Select-Object -ExpandProperty $encryptsecurechannelame
+        if ($encryptsecurechanneloutcome ) {
+            Write-Output "Digitally encrypt or sign secure channel data (always) output: $opscheduletaskoutcome`r`n"
+        }
+        #Should be 1 (enabled)
+        #Path doesn't exist or error means it is disabled
+    } else {
+        Write-Output "Digitally encrypt or sign secure channel data (always) does not exist!"
+    }
+}
+catch {
+    Write-Output "Error auditing Digitally encrypt or sign secure channel data (always)"
+}
