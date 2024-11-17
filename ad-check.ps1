@@ -2,11 +2,15 @@ try {
     $ldapsigningpath = "HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters"
     $ldapsigningname = "LDAPServerIntegrity"
     $ldapsigningoutcome = Get-ItemProperty -Path $ldapsigningpath -Name $ldapsigningname | Select-Object -ExpandProperty $ldapsigningname
-    if ($ldapsigningoutcome) {
-        Write-Output "LDAP Signing output: $ldapsigningoutcome`r`n"
+    if (Test-Path $ldapsigningpath) {
+        if ($ldapsigningoutcome ) {
+            Write-Output "LDAP Signing output: $ldapsigningoutcome`r`n"
+        }
+        #1 means none
+        #2 means require signing
+    } else {
+        Write-Output "LDAP Signing Path does not exist!"
     }
-    #1 means none
-    #2 means require signing
 }
 catch {
     Write-Output "Error auditing LDAP Signing"
@@ -25,7 +29,7 @@ try {
 }
 
 try {
-    $auditkerbsrtvticket = auditpol /get /subcategory:"Kerberos Service Ticket Operations"
+    $auditkerbsrtvticket = auditpol /get /subcategory:"Kerberos Service Ticket Operations" | FindStr "Kerberos"
     if ($auditkerbsrtvticket) {
         Write-Output "Audit Kerberos Service Ticket Operations output: $auditkerbsrtvticket`r`n"
     }
@@ -39,10 +43,15 @@ try {
     $kerbencryptionpath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters"
     $kerbencryptionname = "SupportedEncryptionTypes"
     $kerbencryptionoutput = Get-ItemProperty -Path $kerbencryptionpath -Name $kerbencryptionname | Select-Object -ExpandProperty $kerbencryptionname
-    if ($kerbencryptionoutput) {
-        Write-Output "Kerberos Encryption Support: $kerbencryptionoutput`r`n"
+    if (Test-Path $kerbencryptionpath){
+        if ($kerbencryptionoutput) {
+            Write-Output "Kerberos Encryption Support: $kerbencryptionoutput`r`n"
+        }
+        #Should be 2147483640
+    } else {
+        Write-Output "Kerberos Encryption Support does not exist!"
     }
-    #Should be 2147483640
+    
 } catch {
     Write-Output "Error auditing Kerberos Encryption Support"
 }
