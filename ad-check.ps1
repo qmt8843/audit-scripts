@@ -132,9 +132,10 @@ try {
     $prohibitpath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\GroupPolicy"
     $prohibitname = "fBlockNonDomain"
     if (Test-Path $prohibitpath) {
-        $prohibitoutcome = Get-ItemProperty -Path $prohibitpath -Name $prohibitname | Select-Object -ExpandProperty $prohibitname
+        $prohibitoutcome = Get-ItemProperty -Path $prohibitpath -Name $prohibitname -ErrorAction Stop | Select-Object -ExpandProperty $prohibitname
         Write-Output "Prohibit connection to non-domain networks when connected to domain authenticated network output: $prohibitoutcome`r`n"
         #Should be 1 (Enabled)
+        #Error means it isnt applied
     } else {
         Write-Output "Prohibit connection to non-domain networks when connected to domain authenticated network does not exist!`r`n"
     }
