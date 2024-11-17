@@ -60,7 +60,7 @@ try {
     $opscheduletaskpath = "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa"
     $opscheduletaskname = "SubmitControl"
     if (Test-Path $opscheduletaskpath) {
-        $opscheduletaskoutcome = Get-ItemProperty -Path $opscheduletaskpath -Name $opscheduletaskname | Select-Object -ExpandProperty $opscheduletaskname
+        $opscheduletaskoutcome = Get-ItemProperty -Path $opscheduletaskpath -Name $opscheduletaskname -ErrorAction Stop | Select-Object -ExpandProperty $opscheduletaskname
         if ($opscheduletaskoutcome ) {
             Write-Output "Allow server operators to schedule tasks output: $opscheduletaskoutcome`r`n"
         }
@@ -78,7 +78,7 @@ try {
     $encryptsecurechannelpath = "HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"
     $encryptsecurechannelname = "RequireSignOrSeal"
     if (Test-Path $encryptsecurechannelpath) {
-        $encryptsecurechanneloutcome = Get-ItemProperty -Path $encryptsecurechannelpath -Name $encryptsecurechannelname -ErrorAction Stop | Select-Object -ExpandProperty $encryptsecurechannelame
+        $encryptsecurechanneloutcome = Get-ItemProperty -Path $encryptsecurechannelpath -Name $encryptsecurechannelname | Select-Object -ExpandProperty $encryptsecurechannelame
         if ($encryptsecurechanneloutcome ) {
             Write-Output "Digitally encrypt or sign secure channel data (always) output: $encryptsecurechanneloutcome`r`n"
         }
