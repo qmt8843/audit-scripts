@@ -81,3 +81,19 @@ catch {
     Write-Output "Error auditing Digitally encrypt or sign secure channel data (always)`r`n"
 }
 
+try {
+    $encryptwhenpath = "HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"
+    $encryptwhenname = "SealSecureChannel"
+    if (Test-Path $encryptwhenpath) {
+        $encryptwhenoutcome = Get-ItemProperty -Path $encryptwhenpath -Name $encryptwhenname | Select-Object -ExpandProperty $encryptwhenname
+        $encryptwhenoutcomepart = $encryptwhenoutcome.SealSecureChannel
+        Write-Output "Digitally encrypt or sign secure channel data (when possible) output: $encryptwhenoutcomepart`r`n"
+        #Should be 1 (enabled)
+        #Path doesn't exist or error means it is disabled
+    } else {
+        Write-Output "Digitally encrypt or sign secure channel data (when possible) does not exist!`r`n"
+    }
+}
+catch {
+    Write-Output "Error auditing Digitally encrypt or sign secure channel data (when possible)`r`n"
+}
