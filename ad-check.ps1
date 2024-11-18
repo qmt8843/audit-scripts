@@ -1,3 +1,5 @@
+$failtext = Write-Host "failure" -ForegroundColor Red -NoNewline
+
 try {
     $ldapsigningpath = "HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters"
     $ldapsigningname = "LDAPServerIntegrity"
@@ -7,11 +9,11 @@ try {
         #1 means none
         #2 means require signing
     } else {
-        Write-Output "LDAP Signing Path does not exist!`r`n"
+        Write-Output "$failtext LDAP Signing Path does not exist!`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing LDAP Signing`r`n"
+    Write-Output "$failtext Error auditing LDAP Signing`r`n"
 }
 
 
@@ -21,7 +23,7 @@ try {
     #Default is success
     #Should be set to success & failure
 } catch {
-    Write-Output "Error auditing Audit Kerberos Authentication Service`r`n"
+    Write-Output "$failtext Error auditing Audit Kerberos Authentication Service`r`n"
 }
 
 try {
@@ -30,7 +32,7 @@ try {
     #Default is success
     #Should be set to success & failure
 } catch {
-    Write-Output "Error auditing Audit Kerberos Service Ticket Operations`r`n"
+    Write-Output "$failtext Error auditing Audit Kerberos Service Ticket Operations`r`n"
 }
 
 try {
@@ -41,11 +43,11 @@ try {
         Write-Output "Kerberos Encryption Support: $kerbencryptionoutput`r`n"
         #Should be 2147483640
     } else {
-        Write-Output "Kerberos Encryption Support does not exist!`r`n"
+        Write-Output "$failtext Kerberos Encryption Support does not exist!`r`n"
     }
     
 } catch {
-    Write-Output "Error auditing Kerberos Encryption Support`r`n"
+    Write-Output "$failtext Error auditing Kerberos Encryption Support`r`n"
 }
 
 try {
@@ -57,11 +59,11 @@ try {
         #Should be 0 (disabled)
         #Path doesn't exist or error means it is disabled
     } else {
-        Write-Output "Allow server operators to schedule tasks does not exist!`r`n"
+        Write-Output "$failtext Allow server operators to schedule tasks does not exist!`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing Allow server operators to schedule tasks`r`n"
+    Write-Output "$failtext Error auditing Allow server operators to schedule tasks`r`n"
 }
 
 try {
@@ -74,11 +76,11 @@ try {
         #Should be 1 (enabled)
         #Path doesn't exist or error means it is disabled
     } else {
-        Write-Output "Digitally encrypt or sign secure channel data (always) does not exist!`r`n"
+        Write-Output "$failtext Digitally encrypt or sign secure channel data (always) does not exist!`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing Digitally encrypt or sign secure channel data (always)`r`n"
+    Write-Output "$failtext Error auditing Digitally encrypt or sign secure channel data (always)`r`n"
 }
 
 try {
@@ -90,11 +92,11 @@ try {
         #Should be 1 (enabled)
         #Path doesn't exist or error means it is disabled
     } else {
-        Write-Output "Digitally encrypt or sign secure channel data (when possible) does not exist!`r`n"
+        Write-Output "$failtext Digitally encrypt or sign secure channel data (when possible) does not exist!`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing Digitally encrypt or sign secure channel data (when possible)`r`n"
+    Write-Output "$failtext Error auditing Digitally encrypt or sign secure channel data (when possible)`r`n"
 }
 
 try {
@@ -106,11 +108,11 @@ try {
         #Should be 30 or less (but not 0)
         #Default is 30
     } else {
-        Write-Output "Maximum machine account password set to 30 or fewer does not exist!`r`n"
+        Write-Output "$failtext Maximum machine account password set to 30 or fewer does not exist!`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing Maximum machine account password set to 30 or fewer`r`n"
+    Write-Output "$failtext Error auditing Maximum machine account password set to 30 or fewer`r`n"
 }
 
 try {
@@ -121,11 +123,11 @@ try {
         Write-Output "Require Domain Controller Authentication to unlock workstation output: $unlockoutcome`r`n"
         #Should be 1 (Enabled)
     } else {
-        Write-Output "Require Domain Controller Authentication to unlock workstation does not exist!`r`n"
+        Write-Output "$failtext Require Domain Controller Authentication to unlock workstation does not exist!`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing Require Domain Controller Authentication to unlock workstation`r`n"
+    Write-Output "$failtext Error auditing Require Domain Controller Authentication to unlock workstation`r`n"
 }
 
 try {
@@ -137,11 +139,11 @@ try {
         #Should be 1 (Enabled)
         #Error means it isnt applied
     } else {
-        Write-Output "Prohibit connection to non-domain networks when connected to domain authenticated network does not exist!`r`n"
+        Write-Output "$failtext Prohibit connection to non-domain networks when connected to domain authenticated network does not exist!`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing Prohibit connection to non-domain networks when connected to domain authenticated network`r`n"
+    Write-Output "$failtext Error auditing Prohibit connection to non-domain networks when connected to domain authenticated network`r`n"
 }
 
 try {
@@ -153,11 +155,11 @@ try {
         #Should be 1 (Enabled)
         #Error means it isnt applied
     } else {
-        Write-Output "Do not enumerate connected users on domain-joined computers does not exist!`r`n"
+        Write-Output "$failtext Do not enumerate connected users on domain-joined computers does not exist!`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing Do not enumerate connected users on domain-joined computers`r`n"
+    Write-Output "$failtext Error auditing Do not enumerate connected users on domain-joined computers`r`n"
 }
 
 try {
@@ -165,13 +167,13 @@ try {
     $enumeratename = "BackupDirectory"
     if (Test-Path $enumeratepath) {
         $enumerateoutcome = Get-ItemProperty -Path $enumeratepath -Name $enumeratename -ErrorAction Stop | Select-Object -ExpandProperty $enumeratename
-        Write-Output "Configure password backup directory' is set to 'Enabled: Active Directory' or 'Enabled: Azure Active Directory output: $enumerateoutcome`r`n"
+        Write-Output "Configure password backup directory output: $enumerateoutcome`r`n"
         #Should be 1 (Active Directory) or 2 (Azure AD)
         #Error means it isnt applied
     } else {
-        Write-Output "Configure password backup directory' is set to 'Enabled: Active Directory' or 'Enabled: Azure Active Directory does not exist!`r`n"
+        Write-Output "$failtext Configure password backup directory`r`n"
     }
 }
 catch {
-    Write-Output "Error auditing Configure password backup directory' is set to 'Enabled: Active Directory' or 'Enabled: Azure Active Directory`r`n"
+    Write-Output "$failtext Error auditing Configure password backup directory`r`n"
 }
