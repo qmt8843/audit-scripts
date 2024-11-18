@@ -42,9 +42,15 @@ catch {
 
 try {
     $auditkerbauthsrv = auditpol /get /subcategory:"Kerberos Authentication Service" | FindStr "Kerberos"
-    Write-Output "Audit Kerberos Authentication Service output: $auditkerbauthsrv`r`n"
-    #Default is success
-    #Should be set to success & failure
+    if ("SUCCESS" -in $auditkerbauthsrv -and "Failure" -in $auditkerbauthsrv){
+        Write-Green("SUCCESS: ")
+        Write-Output "Audit Kerberos Authentication Service output: $auditkerbauthsrv`r`n"
+    } else {
+        Write-Red("FAILURE: ")
+        Write-Output "Audit Kerberos Authentication Service output: $auditkerbauthsrv`r`n"
+    }
+    #Default is SUCCESS
+    #Should be set to SUCCESS & failure
 } catch {
     Write-Red("FAILURE: ")
     Write-Output "Error auditing Audit Kerberos Authentication Service`r`n"
@@ -52,9 +58,15 @@ try {
 
 try {
     $auditkerbsrtvticket = auditpol /get /subcategory:"Kerberos Service Ticket Operations" | FindStr "Kerberos"
-    Write-Output "Audit Kerberos Service Ticket Operations output: $auditkerbsrtvticket`r`n"
-    #Default is success
-    #Should be set to success & failure
+    if ("SUCCESS" -in $auditkerbauthsrv -and "Failure" -in $auditkerbauthsrv){
+        Write-Green("SUCCESS: ")
+        Write-Output "Audit Kerberos Service Ticket Operations output: $auditkerbsrtvticket`r`n"
+    } else {
+        Write-Red("FAILURE: ")
+        Write-Output "Audit Kerberos Service Ticket Operations output: $auditkerbsrtvticket`r`n"
+    }
+    #Default is SUCCESS
+    #Should be set to SUCCESS & failure
 } catch {
     Write-Red("FAILURE: ")
     Write-Output "Error auditing Audit Kerberos Service Ticket Operations`r`n"
@@ -65,7 +77,13 @@ try {
     $kerbencryptionname = "SupportedEncryptionTypes"
     if (Test-Path $kerbencryptionpath){
         $kerbencryptionoutput = Get-ItemProperty -Path $kerbencryptionpath -Name $kerbencryptionname | Select-Object -ExpandProperty $kerbencryptionname
-        Write-Output "Kerberos Encryption Support: $kerbencryptionoutput`r`n"
+        if ($kerbencryptionoutput -eq 2147483640) {
+            Write-Green("SUCCESS: ")
+            Write-Output "Kerberos Encryption Support: $kerbencryptionoutput`r`n"
+        } else {
+            Write-Red("FAILURE: ")
+            Write-Output "Kerberos Encryption Support: $kerbencryptionoutput`r`n"
+        }
         #Should be 2147483640
     } else {
         Write-Red("FAILURE: ")
@@ -82,7 +100,13 @@ try {
     $opscheduletaskname = "SubmitControl"
     if (Test-Path $opscheduletaskpath) {
         $opscheduletaskoutcome = Get-ItemProperty -Path $opscheduletaskpath -Name $opscheduletaskname -ErrorAction Stop | Select-Object -ExpandProperty $opscheduletaskname
-        Write-Output "Allow server operators to schedule tasks output: $opscheduletaskoutcome`r`n"
+        if ($opscheduletaskoutcome -eq 0) {
+            Write-Green("SUCCESS: ")
+            Write-Output "Allow server operators to schedule tasks output: $opscheduletaskoutcome`r`n"
+        } else {
+            Write-Red("FAILURE: ")
+            Write-Output "Allow server operators to schedule tasks output: $opscheduletaskoutcome`r`n"
+        }
         #Should be 0 (disabled)
         #Path doesn't exist or error means it is disabled
     } else {
@@ -101,7 +125,13 @@ try {
     if (Test-Path $encryptsecurechannelpath) {
         $encryptsecurechanneloutcome = Get-ItemProperty -Path $encryptsecurechannelpath -Name $encryptsecurechannelname | Select-Object -ExpandProperty $encryptsecurechannelame
         $encryptsecurechanneloutcomepart = $encryptsecurechanneloutcome.RequireSignOrSeal
-        Write-Output "Digitally encrypt or sign secure channel data (always) output: $encryptsecurechanneloutcomepart`r`n"
+        if ($encryptsecurechanneloutcomepart -eq 1) {
+            Write-Green("SUCCESS: ")
+            Write-Output "Digitally encrypt or sign secure channel data (always) output: $encryptsecurechanneloutcomepart`r`n"
+        } else {
+            Write-Red("FAILURE: ")
+            Write-Output "Digitally encrypt or sign secure channel data (always) output: $encryptsecurechanneloutcomepart`r`n"
+        }
         #Should be 1 (enabled)
         #Path doesn't exist or error means it is disabled
     } else {
@@ -119,7 +149,13 @@ try {
     $encryptwhenname = "SealSecureChannel"
     if (Test-Path $encryptwhenpath) {
         $encryptwhenoutcome = Get-ItemProperty -Path $encryptwhenpath -Name $encryptwhenname | Select-Object -ExpandProperty $encryptwhenname
-        Write-Output "Digitally encrypt or sign secure channel data (when possible) output: $encryptwhenoutcome`r`n"
+        if (encryptwhenoutcome -eq 1) {
+            Write-Green("SUCCESS: ")
+            rite-Output "Digitally encrypt or sign secure channel data (when possible) output: $encryptwhenoutcome`r`n"
+        } else {
+            Write-Red("FAILURE: ")
+            Write-Output "Digitally encrypt or sign secure channel data (when possible) output: $encryptwhenoutcome`r`n"
+        }
         #Should be 1 (enabled)
         #Path doesn't exist or error means it is disabled
     } else {
@@ -137,7 +173,13 @@ try {
     $30daysname = "MaximumPasswordAge"
     if (Test-Path $30dayspath) {
         $30daysoutcome = Get-ItemProperty -Path $30dayspath -Name $30daysname | Select-Object -ExpandProperty $30daysname
-        Write-Output "Maximum machine account password set to 30 or fewer output: $30daysoutcome`r`n"
+        if ($30daysoutcome -lt 31 -and $30daysoutcome -gt 0){
+            Write-Green("SUCCESS: ")
+            Write-Output "Maximum machine account password set to 30 or fewer output: $30daysoutcome`r`n"
+        } else {
+            Write-Red("FAILURE: ")
+            Write-Output "Maximum machine account password set to 30 or fewer output: $30daysoutcome`r`n"
+        }
         #Should be 30 or less (but not 0)
         #Default is 30
     } else {
@@ -155,7 +197,13 @@ try {
     $unlockname = "ForceUnlockLogon"
     if (Test-Path $unlockpath) {
         $unlockoutcome = Get-ItemProperty -Path $unlockpath -Name $unlockname | Select-Object -ExpandProperty $unlockname
-        Write-Output "Require Domain Controller Authentication to unlock workstation output: $unlockoutcome`r`n"
+        if ($unlockoutcome -eq 1) {
+            Write-Green("SUCCESS: ")
+            Write-Output "Require Domain Controller Authentication to unlock workstation output: $unlockoutcome`r`n"
+        } else {
+            Write-Red("FAILURE: ")
+            Write-Output "Require Domain Controller Authentication to unlock workstation output: $unlockoutcome`r`n"
+        }
         #Should be 1 (Enabled)
     } else {
         Write-Red("FAILURE: ")
@@ -172,7 +220,13 @@ try {
     $prohibitname = "fBlockNonDomain"
     if (Test-Path $prohibitpath) {
         $prohibitoutcome = Get-ItemProperty -Path $prohibitpath -Name $prohibitname -ErrorAction Stop | Select-Object -ExpandProperty $prohibitname
-        Write-Output "Prohibit connection to non-domain networks when connected to domain authenticated network output: $prohibitoutcome`r`n"
+        if ($prohibitoutcome -eq 1) {
+            Write-Green("SUCCESS: ")
+            Write-Output "Prohibit connection to non-domain networks when connected to domain authenticated network output: $prohibitoutcome`r`n"
+        } else {
+            Write-Red("FAILURE: ")
+            Write-Output "Prohibit connection to non-domain networks when connected to domain authenticated network output: $prohibitoutcome`r`n"
+        }
         #Should be 1 (Enabled)
         #Error means it isnt applied
     } else {
@@ -190,7 +244,13 @@ try {
     $enumeratename = "DontEnumerateConnectedUsers"
     if (Test-Path $enumeratepath) {
         $enumerateoutcome = Get-ItemProperty -Path $enumeratepath -Name $enumeratename -ErrorAction Stop | Select-Object -ExpandProperty $enumeratename
-        Write-Output "Do not enumerate connected users on domain-joined computers output: $enumerateoutcome`r`n"
+        if ($enumerateoutcome -eq 1) {
+            Write-Green("SUCCESS: ")
+            Write-Output "Do not enumerate connected users on domain-joined computers output: $enumerateoutcome`r`n"
+        } else {
+            Write-Red("FAILURE: ")
+            Write-Output "Do not enumerate connected users on domain-joined computers output: $enumerateoutcome`r`n"
+        }
         #Should be 1 (Enabled)
         #Error means it isnt applied
     } else {
@@ -208,7 +268,13 @@ try {
     $enumeratename = "BackupDirectory"
     if (Test-Path $enumeratepath) {
         $enumerateoutcome = Get-ItemProperty -Path $enumeratepath -Name $enumeratename -ErrorAction Stop | Select-Object -ExpandProperty $enumeratename
-        Write-Output "Configure password backup directory output: $enumerateoutcome`r`n"
+        if ($enumerateoutcome -eq 1 -or $enumerateoutcome -eq 2) {
+            Write-Green("SUCCESS: ")
+            Write-Output "Configure password backup directory output: $enumerateoutcome`r`n"
+        } else {
+            Write-Red("FAILURE: ")
+            Write-Output "Configure password backup directory output: $enumerateoutcome`r`n"
+        }
         #Should be 1 (Active Directory) or 2 (Azure AD)
         #Error means it isnt applied
     } else {
