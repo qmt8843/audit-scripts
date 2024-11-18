@@ -1,13 +1,19 @@
-$failtext = Write-Host "failure" -ForegroundColor Red -NoNewline
+$failtext = Write-Host "FAILURE  " -ForegroundColor Red -NoNewline
+$successtext = Write-Host "FAILURE  " -ForegroundColor Green -NoNewline
 
 try {
     $ldapsigningpath = "HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters"
     $ldapsigningname = "LDAPServerIntegrity"
     if (Test-Path $ldapsigningpath) {
         $ldapsigningoutcome = Get-ItemProperty -Path $ldapsigningpath -Name $ldapsigningname | Select-Object -ExpandProperty $ldapsigningname
-        Write-Output "LDAP Signing output: $ldapsigningoutcome`r`n"
+        
         #1 means none
         #2 means require signing
+        if ($ldapsigningoutcome -eq 1) {
+            Write-Output "$failure LDAP Signing output: $ldapsigningoutcome`r`n"
+        } elseif ($ldapsigningoutcome -eq 2) {
+            Write-Output "$successtext LDAP Signing output: $ldapsigningoutcome`r`n"
+        }
     } else {
         Write-Output "$failtext LDAP Signing Path does not exist!`r`n"
     }
